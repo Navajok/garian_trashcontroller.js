@@ -4,7 +4,7 @@
 
 ## Setup
 
-From this folder, start Node.js by running `node` in your terminal. Paste the code in `example` below into the Node.js prompt. The module has no external dependencies.
+From this folder, type `node` in your terminal. Paste the code in `example` below into `>` prompt.  
 
 ## Functions
 
@@ -13,13 +13,13 @@ From this folder, start Node.js by running `node` in your terminal. Paste the co
 | `findTrashDropOffPointsbyZipCode(zipCode)` | Postal code as a string, such as `"761339"`. | An array of matching drop-off points, or a message if there are no matches. |
 | `checkAcceptedItems(pointId, itemId)` | An existing drop-off point ID and an item ID, both strings. | `true` if the point accepts the item, otherwise `false`. |
 | `checkRecyclingRecord(UserID)` | User ID as a string, such as `"U001"`. | An array of the user's records. An empty array means there are no matches. |
-| `createRecyclingRecord(UserID, pointID, itemID, quantity, totalWeightkg)` | User ID and drop-off point ID as strings. Pass a non-empty array of item IDs, an equally sized array of positive quantities in the same order, and a positive total weight in kilograms. | A confirmation message with the new record ID, or a validation message. |
+| `createRecyclingRecord(UserID, pointID, itemID, quantity, totalWeightkg)` | User ID and drop-off point ID as strings. non-empty array of item IDs, an equally sized array of positive quantities in the same order, and a positive total weight in kilograms. such as `"("U001", "P001", ["E001", "E002"], [1, 2], 3)"`| A confirmation message with the new record ID, or a validation message. |
 | `calculateRewardPoints(recordID)` | Record ID as a string, such as `"R001"`. | A message with the sum of points per item multiplied by its quantity, or a message if the record or an item type is missing. |
 | `getRecyclingProgress(userID)` | User ID as a string, such as `"U001"`. | A rounded percentage as a string without the percent sign, or a message if the user is missing. |
 
 ## Example
 
-Start a fresh Node.js session and paste the tests below in order. Each test prints its result so you can compare it with the `Expected Output` comment.
+Start a Node.js session and paste the tests below in order. Each test prints its result so you can compare it with the `Expected Output` comment.
 
 ```js
 const trashController = require("./Garian_trashController.js");
@@ -31,7 +31,7 @@ console.log(trashController.checkAcceptedItems("P001", "E002")); // Expected Out
 console.log(trashController.checkAcceptedItems("P002", "E002")); // Expected Output: false
 
 // look up records, reward points, and progress before adding a record.
-console.log(trashController.checkRecyclingRecord("U001")); // Expected Output: Array containing record R001 for U001
+console.log(JSON.stringify(trashController.checkRecyclingRecord("U001"),null,2)); // Expected Output: Array containing record R001 belonging to user U001
 console.log(trashController.checkRecyclingRecord("U003")); // Expected Output: []
 console.log(trashController.calculateRewardPoints("R001")); // Expected Output: Reward Points from Record R001: 70
 console.log(trashController.calculateRewardPoints("R999")); // Expected Output: Record R999 not found.
@@ -55,7 +55,7 @@ console.log(trashController.createRecyclingRecord("U001", "P001", [], [], 1)); /
 console.log(trashController.checkRecyclingRecord("U001")); // Expected Output: Array containing records R001 and R003 for U001
 ```
 
-New records are stored in memory and reset when you exit Node.js. Start a fresh session before rerunning the tests so the new record is assigned `R003` again.
+New records are stored in memory and reset when you exit Node.js. Start a fresh session before rerunning the tests to create record `R003` again.
 
 # References
 
