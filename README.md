@@ -28,12 +28,12 @@ const trashController = require("./Garian_trashController.js");
 // find drop-off points and check accepted items.
 console.table(trashController.findTrashDropOffPointsbyZipCode("761339")); // Expected Output: Table with drop-off points P001 and P004
 console.log(trashController.findTrashDropOffPointsbyZipCode("999999")); // Expected Output: There is no Drop Off Point at Zip Code: 999999
-console.table(trashController.checkAcceptedItemsDropOffPoints("E001")); // Expected Output: Table with drop-off points that accept item "E001" (P001 and P004)
+console.table(trashController.checkAcceptedItemsDropOffPoints("E001")); // Expected Output: Table with drop-off points that accept item "E001"
 console.log(trashController.checkAcceptedItems("P001", "E001")); // Expected Output: true
 console.log(trashController.checkAcceptedItems("P002", "E002")); // Expected Output: false
 // look up records, reward points, and progress before adding a record.
-console.table(trashController.displayRecyclingRecord("U001")); // Expected Output: Table with record R001 and items E001(x1), E002(x3)
-console.table(trashController.displayRecyclingRecord("U003")); // Expected Output: Empty table
+trashController.displayRecyclingRecord("U001"); // Expected Output: Table with records belonging to user "U001" (R001)
+trashController.displayRecyclingRecord("U003"); // Expected Output: Empty table
 console.log("Reward Points from Record R001: " + trashController.calculateRewardPoints("R001")); // Expected Output: Reward Points from Record R001: 70
 console.log(trashController.calculateRewardPoints("R003")); // Expected Output: Record R003 not found.
 console.log("User Garian has reached " + trashController.getRecyclingProgress("U001") + "% of his recycling goal"); // Expected Output: User Garian has reached 28% of his recycling goal
@@ -54,7 +54,7 @@ console.log(trashController.createRecyclingRecord("U001", "P001", ["E001"], [-2]
 console.log(trashController.createRecyclingRecord("U001", "P001", ["E001"], [1], -5)); // Expected Output: Invalid total weight.
 console.log(trashController.createRecyclingRecord("U001", "P001", ["E001", "E002"], [1], 3)); // Expected Output: Invalid item IDs or quantities.
 console.log(trashController.createRecyclingRecord("U001", "P001", [], [], 1)); // Expected Output: Invalid item IDs or quantities.
-console.table(trashController.displayRecyclingRecord("U001")); // Expected Output: Table with records belonging to user "U001" (R001 and R003)
+trashController.displayRecyclingRecord("U001"); // Expected Output: Table with records belonging to user "U001" (R001 and R003)
 ```
 
 New records are stored in memory and reset when you exit Node.js. Start a fresh session before rerunning the tests to create record `R003` again.

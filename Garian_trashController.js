@@ -116,7 +116,7 @@ module.exports = {
     },
   ],
 
-  //MAIN FUNCTIONS
+  //FUNCTIONS
   findTrashDropOffPointsbyZipCode(zipCode) {
     let DropOffPoints = this.trashDropOffPoints.filter(
       (point) => point.zipCode === zipCode,
@@ -134,6 +134,14 @@ module.exports = {
     return AcceptedItemsDropOffPoints.length > 0
       ? AcceptedItemsDropOffPoints
       : `There is no Drop Off Point that accepts itemId ${itemId}`;
+  },
+
+  checkRecyclingRecord(UserID) {
+    let record = this.recyclingRecords.filter(
+      (record) => record.UserID === UserID,
+    );
+
+    return record;
   },
 
   displayRecyclingRecord(UserID) {
@@ -166,7 +174,13 @@ module.exports = {
       });
     }
 
-    return formattedRecord;
+    console.table(formattedRecord);
+  },
+
+  checkAcceptedItems(pointId, itemId) {
+    return this.trashDropOffPoints
+      .find((point) => point.PointID === pointId)
+      .accepteditemIds.includes(itemId);
   },
 
   createRecyclingRecord(UserID, pointID, itemID, quantity, totalWeightkg) {
@@ -276,20 +290,5 @@ module.exports = {
     ).toFixed(2);
 
     return percentage;
-  },
-
-  //HELPER FUNCTIONS
-  checkRecyclingRecord(UserID) {
-    let record = this.recyclingRecords.filter(
-      (record) => record.UserID === UserID,
-    );
-
-    return record;
-  },
-
-  checkAcceptedItems(pointId, itemId) {
-    return this.trashDropOffPoints
-      .find((point) => point.PointID === pointId)
-      .accepteditemIds.includes(itemId);
   },
 };
