@@ -118,7 +118,7 @@ module.exports = {
 
   //FUNCTIONS
   findTrashDropOffPointsbyZipCode(zipCode) {
-    let DropOffPoints = this.trashDropOffPoints.filter(
+    const DropOffPoints = this.trashDropOffPoints.filter(
       (point) => point.zipCode === zipCode,
     );
     return DropOffPoints.length > 0
@@ -127,7 +127,7 @@ module.exports = {
   },
 
   checkAcceptedItemsDropOffPoints(itemId) {
-    let AcceptedItemsDropOffPoints = this.trashDropOffPoints.filter((point) =>
+    const AcceptedItemsDropOffPoints = this.trashDropOffPoints.filter((point) =>
       point.accepteditemIds.includes(itemId),
     );
 
@@ -137,7 +137,7 @@ module.exports = {
   },
 
   checkRecyclingRecord(UserID) {
-    let record = this.recyclingRecords.filter(
+    const record = this.recyclingRecords.filter(
       (record) => record.UserID === UserID,
     );
 
@@ -258,7 +258,7 @@ module.exports = {
   },
 
   calculateRewardPoints(recordID) {
-    let record = this.recyclingRecords.find(
+    const record = this.recyclingRecords.find(
       (record) => record.recordID === recordID,
     );
 
@@ -269,7 +269,7 @@ module.exports = {
     let totalPoints = 0;
 
     for (let i = 0; i < record.items.length; i++) {
-      let eWaste = this.eWasteTypes.find(
+      const eWaste = this.eWasteTypes.find(
         (type) => type.itemID === record.items[i].itemID,
       );
 
@@ -280,13 +280,13 @@ module.exports = {
   },
 
   getRecyclingProgress(userID) {
-    let user = this.Users.find((user) => user.UserID === userID);
+    const user = this.Users.find((user) => user.UserID === userID);
 
     if (!user) {
       return `user ${user} not found.`;
     }
 
-    let userRecords = this.checkRecyclingRecord(userID);
+    const userRecords = this.checkRecyclingRecord(userID);
 
     let totalWeightRecycled = 0;
 
