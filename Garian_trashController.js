@@ -1,4 +1,5 @@
 module.exports = {
+  //DATA
   Users: [
     {
       UserID: "U001",
@@ -8,13 +9,13 @@ module.exports = {
     },
     {
       UserID: "U002",
-      Name: "Garian1",
+      Name: "Matt",
       "Zip Code": "761330",
       "Target(KG)": 6,
     },
     {
       UserID: "U003",
-      Name: "Garian2",
+      Name: "Javier",
       "Zip Code": "761331",
       "Target(KG)": 7,
     },
@@ -110,42 +111,62 @@ module.exports = {
           quantity: "3",
         },
       ],
-      totalWeightkg: 1.2,
+      totalWeightkg: 0.2,
       date: "06/11/2026",
     },
   ],
 
+  //MAIN FUNCTIONS
   findTrashDropOffPointsbyZipCode(zipCode) {
     let DropOffPoints = this.trashDropOffPoints.filter(
       (point) => point.zipCode === zipCode,
     );
     return DropOffPoints.length > 0
       ? DropOffPoints
-      : `There is no Trash Drop Off Point at Zip Code: ${zipCode}`;
-
-    // let DropOffPoints = [];
-
-    // for (i = 0; i < this.trashDropOffPoints.length; i++) {
-    //     if (this.trashDropOffPoints[i].zipCode === zipCode) {
-    //         DropOffPoints.push(this.trashDropOffPoints[i])
-    //     }
-    // }
-
-    // return DropOffPoints.length > 0 ? DropOffPoints : `There is no Trash Drop Off Point at Zip Code: ${ zipCode } `;
+      : `There is no Drop Off Point at Zip Code: ${zipCode}`;
   },
 
-  checkAcceptedItems(pointId, itemId) {
-    return this.trashDropOffPoints
-      .find((point) => point.PointID === pointId)
-      .accepteditemIds.includes(itemId);
-  },
-
-  checkRecyclingRecord(UserID) {
-    let record = this.recyclingRecords.filter(
-      (record) => record.UserID === UserID,
+  checkAcceptedItemsDropOffPoints(itemId) {
+    let AcceptedItemsDropOffPoints = this.trashDropOffPoints.filter((point) =>
+      point.accepteditemIds.includes(itemId),
     );
 
-    return record;
+    return AcceptedItemsDropOffPoints.length > 0
+      ? AcceptedItemsDropOffPoints
+      : `There is no Drop Off Point that accepts itemId ${itemId}`;
+  },
+
+  displayRecyclingRecord(UserID) {
+    const records = this.checkRecyclingRecord(UserID);
+
+    const formattedRecord = [];
+
+    for (let i = 0; i < records.length; i++) {
+      let itemSummary = "";
+      for (let x = 0; x < records[i].items.length; x++) {
+        itemSummary +=
+          records[i].items[x].itemID +
+          "(x" +
+          records[i].items[x].quantity +
+          ")";
+
+        if (x < records[i].items.length - 1) {
+          itemSummary += ", ";
+        }
+      }
+
+      // Push ONE row for the entire recycling record
+      formattedRecord.push({
+        recordID: records[i].recordID,
+        UserID: records[i].UserID,
+        pointID: records[i].pointID,
+        items: itemSummary,
+        totalWeightkg: records[i].totalWeightkg,
+        date: records[i].date,
+      });
+    }
+
+    return formattedRecord;
   },
 
   createRecyclingRecord(UserID, pointID, itemID, quantity, totalWeightkg) {
@@ -173,8 +194,14 @@ module.exports = {
     }
 
     for (let i = 0; i < itemID.length; i++) {
+      const eWaste = this.eWasteTypes.find((type) => type.itemID === itemID[i]);
+
+      if (!eWaste) {
+        return `Item ${itemID[i]} not found in e-waste types.`;
+      }
+
       if (!this.checkAcceptedItems(pointID, itemID[i])) {
-        return `Item ${itemID[i]} is not accepted at drop - off point ${pointID}.`;
+        return `Item ${itemID[i]} is not accepted at drop-off point ${pointID}.`;
       }
 
       if (quantity[i] <= 0) {
@@ -222,14 +249,10 @@ module.exports = {
         (type) => type.itemID === record.items[i].itemID,
       );
 
-      if (!eWaste) {
-        return `Item ${record.items[i].itemID} not found in e-waste types.`;
-      }
-
       totalPoints += Number(eWaste.Points) * Number(record.items[i].quantity);
     }
 
-    return `Reward Points from Record ${recordID}: ${totalPoints}`;
+    return totalPoints;
   },
 
   getRecyclingProgress(userID) {
@@ -241,18 +264,32 @@ module.exports = {
 
     let userRecords = this.checkRecyclingRecord(userID);
 
-    if (!userRecords) {
-      return `Recycling records for user ${user} not found.`;
-    }
-
     let totalWeightRecycled = 0;
 
     for (let i = 0; i < userRecords.length; i++) {
       totalWeightRecycled += userRecords[i].totalWeightkg;
     }
 
-    const percentage = ((totalWeightRecycled / user["Target(KG)"]) * 100).toFixed();
+    const percentage = (
+      (totalWeightRecycled / user["Target(KG)"]) *
+      100
+    ).toFixed(2);
 
     return percentage;
+  },
+
+  //HELPER FUNCTIONS
+  checkRecyclingRecord(UserID) {
+    let record = this.recyclingRecords.filter(
+      (record) => record.UserID === UserID,
+    );
+
+    return record;
+  },
+
+  checkAcceptedItems(pointId, itemId) {
+    return this.trashDropOffPoints
+      .find((point) => point.PointID === pointId)
+      .accepteditemIds.includes(itemId);
   },
 };
