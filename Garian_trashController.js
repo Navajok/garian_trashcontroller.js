@@ -184,13 +184,13 @@ module.exports = {
   },
 
   createRecyclingRecord(UserID, pointID, itemID, quantity, totalWeightkg) {
-    let user = this.Users.find((user) => user.UserID === UserID);
+    const user = this.Users.find((user) => user.UserID === UserID);
 
     if (!user) {
       return "User not found.";
     }
 
-    let point = this.trashDropOffPoints.find(
+    const point = this.trashDropOffPoints.find(
       (point) => point.PointID === pointID,
     );
 
@@ -218,22 +218,32 @@ module.exports = {
         return `Item ${itemID[i]} is not accepted at drop-off point ${pointID}.`;
       }
 
-      if (quantity[i] <= 0) {
+      if (typeof quantity[i] !== "number" || quantity[i] <= 0) {
         return `Item ${itemID[i]} has an invalid quantity of ${quantity[i]}.`;
       }
     }
 
-    if (totalWeightkg <= 0) {
+    if (typeof totalWeightkg !== "number" || totalWeightkg <= 0) {
       return "Invalid total weight.";
     }
 
-    let recordID =
+    const recordID =
       "R" + String(this.recyclingRecords.length + 1).padStart(3, "0");
 
-    let items = itemID.map((id, index) => ({
-      itemID: id,
-      quantity: quantity[index],
-    }));
+    const items = [];
+
+    for (let i = 0; i < itemID.length; i++) {
+      const existingItem = items.find((item) => item.itemID === itemID[i]);
+
+      if (existingItem) {
+        existingItem.quantity += quantity[i];
+      } else {
+        items.push({
+          itemID: itemID[i],
+          quantity: quantity[i],
+        });
+      }
+    }
 
     this.recyclingRecords.push({
       recordID: recordID,

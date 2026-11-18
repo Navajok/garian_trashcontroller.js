@@ -37,7 +37,7 @@ trashController.displayRecyclingRecord("U003"); // Expected Output: Empty table
 console.log("Reward Points from Record R001: " + trashController.calculateRewardPoints("R001")); // Expected Output: Reward Points from Record R001: 70
 console.log(trashController.calculateRewardPoints("R003")); // Expected Output: Record R003 not found.
 console.log("User Garian has reached " + trashController.getRecyclingProgress("U001") + "% of his recycling goal"); // Expected Output: User Garian has reached 28% of his recycling goal
-console.log("User Javier has reached " + trashController.getRecyclingProgress("U003") + "% of his recycling goal"); // Expected Output: User Garian has reached 0% of his recycling goal
+console.log("User Javier has reached " + trashController.getRecyclingProgress("U003") + "% of his recycling goal"); // Expected Output: User Javier has reached 0% of his recycling goal
 
 // Create a valid record and check its effect.
 console.log(trashController.createRecyclingRecord("U001", "P001", ["E001", "E002"], [1, 2], 3)); // Expected Output: Recycling record R003 created successfully.
@@ -54,7 +54,13 @@ console.log(trashController.createRecyclingRecord("U001", "P001", ["E001"], [-2]
 console.log(trashController.createRecyclingRecord("U001", "P001", ["E001"], [1], -5)); // Expected Output: Invalid total weight.
 console.log(trashController.createRecyclingRecord("U001", "P001", ["E001", "E002"], [1], 3)); // Expected Output: Invalid item IDs or quantities.
 console.log(trashController.createRecyclingRecord("U001", "P001", [], [], 1)); // Expected Output: Invalid item IDs or quantities.
-trashController.displayRecyclingRecord("U001"); // Expected Output: Table with records belonging to user "U001" (R001 and R003)
+console.log(trashController.createRecyclingRecord("U001", "P001", ["E001"], ["1"], 1)); // Expected Output: Item E001 has an invalid quantity of 1.
+console.log(trashController.createRecyclingRecord("U001", "P001", ["E001"], [1], "1")); // Expected Output: Invalid total weight.
+
+// Create a valid record with duplicate item IDs.
+console.log(trashController.createRecyclingRecord("U001", "P001", ["E001", "E001"], [1, 2], 1.5),); // Expected Output: Recycling record R004 created successfully.
+
+trashController.displayRecyclingRecord("U001"); // Expected Output: Table with records belonging to user "U001" (R001, R003 and R004)
 ```
 
 New records are stored in memory and reset when you exit Node.js. Start a fresh session before rerunning the tests to create record `R003` again.
