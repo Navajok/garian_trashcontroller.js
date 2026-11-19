@@ -4,20 +4,20 @@
 
 ## Setup
 
-From this folder, type `node` in your terminal. Paste the code in `example` below into `>` prompt.  
+type `node` in your terminal. Paste the code in `example` below into `>` prompt.  
 
 ## Functions
 
 | Function | Parameters | Return value |
-| ---------| -----------| -------------|
+| --- | --- | --- |
 | `findTrashDropOffPointsbyZipCode(zipCode)` | Postal code as a string, such as `"761339"`. | An array of matching drop-off points, or a message if there are no matches. |
-| `checkAcceptedItemsDropOffPoints(itemId)` | An existing item ID as a string. | An array of drop-off points that accept the item, or a message if there are no matches. |
-| `displayRecyclingRecord(UserID)` | User ID as a string, such as `"U001"`. | One table-ready row per recycling record, with items formatted as `E001(x1), E002(x3)`. Returns an empty array when there are no records. |
-| `createRecyclingRecord(UserID, pointID, itemID, quantity, totalWeightkg)` | User ID and drop-off point ID as strings. non-empty array of item IDs, an equally sized array of positive quantities in the same order, and a positive total weight in kilograms. such as `"("U001", "P001", ["E001", "E002"], [1, 2], 3)"`| A confirmation message with the new record ID, or a validation message. |
-| `calculateRewardPoints(recordID)` | Record ID as a string, such as `"R001"`. | A message with the sum of points per item multiplied by its quantity, or a message if the record or an item type is missing. |
-| `getRecyclingProgress(userID)` | User ID as a string, such as `"U001"`. | A rounded percentage as a string without the percent sign, or a message if the user is missing. |
-
-`checkRecyclingRecord(UserID)` retrieves raw records for `displayRecyclingRecord()` and `getRecyclingProgress()`. `checkAcceptedItems(pointId, itemId)` checks whether an existing drop-off point accepts an item and supports validation in `createRecyclingRecord()`.
+| `checkAcceptedItemsDropOffPoints(itemId)` | Item ID as a string. | An array of drop-off points that accept the item, or a message if there are no matches. |
+| `checkRecyclingRecord(UserID)` | User ID as a string, such as `"U001"`. | An array of the user’s raw recycling records, or an empty array if there are no matches|
+| `displayRecyclingRecord(UserID)` | User ID as a string, such as `"U001"`. | Returns `undefined`. Prints a table with one row per record and items formatted as `E001(x1), E002(x3)`. Prints an empty table if there are no records. |
+| `checkAcceptedItems(pointId, itemId)` | An existing drop-off point ID and an item ID, both as strings. | `true` if the specified point accepts the item, or `false` otherwise.|
+| `createRecyclingRecord(UserID, pointID, itemID, quantity, totalWeightkg)` | User and drop-off point IDs as strings, matching non-empty arrays of item IDs and positive numeric quantities, and a positive numeric weight in kilograms. | A confirmation message with the new record ID, or a validation message. |
+| `calculateRewardPoints(recordID)` | Record ID as a string, such as `"R001"`. | The total reward points as a number, or a message if the record is missing. |
+| `getRecyclingProgress(userID)` | User ID as a string, such as `"U001"`. | A percentage as a string with two decimal places and no percent sign, or a message if the user is missing. |
 
 ## Example
 
