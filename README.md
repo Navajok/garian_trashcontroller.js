@@ -71,8 +71,4 @@ New records are stored in memory and reset when you exit Node.js. Start a fresh 
 
 - [EARTH911](https://search.earth911.com/) describes how users can find e-waste drop-off points based off zipcode
 
-- (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart) describes how to create incrementing record IDs using the `padStart()` string method
-
-- (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray) describes how to check if an Array is an Array
-
 - Used ChatGPT to generate mock schemas and data
