@@ -187,6 +187,7 @@ module.exports = {
     const user = this.Users.find((user) => user.UserID === UserID);
 
     if (!user) {
+      // check if user exists
       return "User not found.";
     }
 
@@ -195,9 +196,11 @@ module.exports = {
     );
 
     if (!point) {
+      // check if drop-off points exists
       return "Drop-off point not found.";
     }
 
+    // check if itemId & quantity are non-empty arrays that are equal in length
     if (
       !Array.isArray(itemID) ||
       !Array.isArray(quantity) ||
@@ -211,20 +214,20 @@ module.exports = {
       const eWaste = this.eWasteTypes.find((type) => type.itemID === itemID[i]);
 
       if (!eWaste) {
-        return `Item ${itemID[i]} not found in e-waste types.`;
+        return `Item ${itemID[i]} not found in e-waste types.`; // check if item exists
       }
 
       if (!this.checkAcceptedItems(pointID, itemID[i])) {
-        return `Item ${itemID[i]} is not accepted at drop-off point ${pointID}.`;
+        return `Item ${itemID[i]} is not accepted at drop-off point ${pointID}.`; // check if item is accepted at drop-off point
       }
 
       if (typeof quantity[i] !== "number" || quantity[i] <= 0) {
-        return `Item ${itemID[i]} has an invalid quantity of ${quantity[i]}.`;
+        return `Item ${itemID[i]} has an invalid quantity of ${quantity[i]}.`; // check if quantity is positive and is a number
       }
     }
 
     if (typeof totalWeightkg !== "number" || totalWeightkg <= 0) {
-      return "Invalid total weight.";
+      return "Invalid total weight."; // check if total weight is positive and is a number
     }
 
     const recordID =
@@ -232,6 +235,7 @@ module.exports = {
 
     const items = [];
 
+    // combines duplicate item entries
     for (let i = 0; i < itemID.length; i++) {
       const existingItem = items.find((item) => item.itemID === itemID[i]);
 
@@ -270,10 +274,10 @@ module.exports = {
 
     for (let i = 0; i < record.items.length; i++) {
       const eWaste = this.eWasteTypes.find(
-        (type) => type.itemID === record.items[i].itemID,
+        (type) => type.itemID === record.items[i].itemID, // Match itemID from record against eWasteTypes to find item type
       );
 
-      totalPoints += Number(eWaste.Points) * Number(record.items[i].quantity);
+      totalPoints += Number(eWaste.Points) * Number(record.items[i].quantity); //multiply points per item by number of item in record 
     }
 
     return totalPoints;
@@ -291,13 +295,10 @@ module.exports = {
     let totalWeightRecycled = 0;
 
     for (let i = 0; i < userRecords.length; i++) {
-      totalWeightRecycled += userRecords[i].totalWeightkg;
+      totalWeightRecycled += userRecords[i].totalWeightkg; //Adds total weight of recycled items from all of users records
     }
 
-    const percentage = (
-      (totalWeightRecycled / user["Target(KG)"]) *
-      100
-    ).toFixed(2);
+    const percentage = ((totalWeightRecycled / user["Target(KG)"]) * 100 ).toFixed(2); // divide total weight recycled by users target weight
 
     return percentage;
   },
